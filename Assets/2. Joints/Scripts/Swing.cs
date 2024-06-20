@@ -6,9 +6,13 @@ public class Swing : MonoBehaviour
     [SerializeField] private Transform _addForcePoint;
     [SerializeField] private Vector3 _force;
     
+    private bool _isSwingKeyDown;
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-            _rigidbody.AddForceAtPosition(_force, _addForcePoint.position);      
+        _isSwingKeyDown = Input.GetKeyDown(KeyCode.W);
+        
+        if(_isSwingKeyDown)
+            _rigidbody.AddForceAtPosition(_force, _addForcePoint.position);
     }
 }

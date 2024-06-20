@@ -24,6 +24,8 @@ public class Catapult : MonoBehaviour
 
     private bool _canReload;
     private bool _canLaunch;
+    private bool _isLaunchKeyDown;
+    private bool _isReloadKeyDown;
 
     private void Awake()
     {
@@ -34,18 +36,21 @@ public class Catapult : MonoBehaviour
              { spring = _launchSpring, damper = _launchDamper, targetPosition = _launchTargetPosition };
     }
 
-    private void Start() => StartCoroutine(WaitForReloading());
+    private void Start() => StartCoroutine(ReloadCoroutine());
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        _isLaunchKeyDown = Input.GetKeyDown(KeyCode.Space);
+        _isReloadKeyDown = Input.GetKeyDown(KeyCode.R);
+        
+        if (_isLaunchKeyDown == true)
             Launch();
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (_isReloadKeyDown == true)
             Reload();
     }
 
-    private IEnumerator WaitForReloading()
+    private IEnumerator ReloadCoroutine()
     {
         do
         {
@@ -57,7 +62,7 @@ public class Catapult : MonoBehaviour
         _canLaunch = true;
     }
     
-    private IEnumerator WaitForLaunchingEnd()
+    private IEnumerator LaunchCoroutine()
     {
         do
         {
@@ -74,7 +79,7 @@ public class Catapult : MonoBehaviour
         
         _hingeJoint.spring = _launchJointSpring;
         _canLaunch = false;
-        StartCoroutine(WaitForLaunchingEnd());
+        StartCoroutine(LaunchCoroutine());
     }
 
     private void Reload()
@@ -84,6 +89,6 @@ public class Catapult : MonoBehaviour
         
         _hingeJoint.spring = _idleJointSpring;
         _canReload = false;
-        StartCoroutine(WaitForReloading());
+        StartCoroutine(ReloadCoroutine());
     }
 }
